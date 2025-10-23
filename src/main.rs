@@ -10,15 +10,19 @@ use git2::{
 #[derive(Parser)]
 #[command(version="0.1", about="Automatically commits all changes in a repo after using connecting to ssh-key", long_about=None)]
 struct Cli {
+    /// Directory of the repo
     #[arg(short='d', long="directory", value_parser=value_parser!(PathBuf))]
     repo_path: PathBuf,
 
+    /// Path to SSH key file
     #[arg(short='k', long="keyfile", value_parser=value_parser!(PathBuf), default_value=format!("{}/.ssh/id_ed25519", home::home_dir().unwrap().display()))]
     key_file: PathBuf,
 
+    /// Password to the SSH key, can also set SSHPASS env variable instead
     #[arg(short = 'p', long = "password", env = "SSHPASS")]
     password: Option<String>,
 
+    /// Message to include in the commit, Defaults to "From <OS>: <date&time>"
     #[arg(short = 'm', long = "message")]
     commit_message: Option<MaybeStdin<String>>,
 }

@@ -2,7 +2,7 @@
   description = "Rust development shell";
 
   inputs = {
-    nixpkgs.url = "github:nixos/nixpkgs?ref=nixos-24.11";
+    nixpkgs.url = "github:nixos/nixpkgs?ref=nixos-25.05";
     fenix = {
       url = "github:nix-community/fenix";
       inputs.nixpkgs.follows = "nixpkgs";
@@ -38,5 +38,21 @@
           rust
       ];
     };
+
+    packages.x86_64-linux.default = self.packages.x86_64-linux.auto_commit;
+
+    packages.x86_64-linux.auto_commit = pkgs.rustPlatform.buildRustPackage (finalAttrs: {
+      pname = "auto_commit";
+      version = "0.0.1";
+
+      src = ./.;
+      nativeBuildInputs = with pkgs; [
+        pkg-config
+      ];
+      buildInputs = with pkgs; [
+          openssl
+      ];
+      cargoHash = "sha256-MWKiYrlf6u5EPa+kQW4USpEsnyM3BZh07lBb40v3T3A=";
+    });
   };
 }
